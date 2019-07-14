@@ -1,5 +1,4 @@
 import firebase from '../firebase/config'
-import updateExpenses from '../redux/actions/expensesActions'
 
 export const authRef = firebase.auth();
 export const provider = new firebase.auth.GoogleAuthProvider();
@@ -7,11 +6,12 @@ export const db = firebase.firestore();
 
 
 export const getCollection = async (collection, callback, { name, operator, value } = {}) => {
-    const collectionRef = await db.collection('expenses');
+    const collectionRef = await db.collection(collection);
     return collectionRef.onSnapshot(callback);
 }
-export const saveExpense = async (body) => {
-    const collectionRef = db.collection('expenses');
+
+export const saveItem = async (collection, body) => {
+    const collectionRef = db.collection(collection);
     if(body.id){
         await collectionRef.doc(body.id).update(body);
     } else {
@@ -19,12 +19,12 @@ export const saveExpense = async (body) => {
     }
 }
 
-export const addExpense = async (body) => {
-    const collectionRef = db.collection('expenses');
+export const addItem = async (collection, body) => {
+    const collectionRef = db.collection(collection);
     await collectionRef.add(body);
 }
 
-export const deleteExpense = async (id)=>{
-    const collectionRef = db.collection('expenses');
+export const deleteItem = async (collection, id)=>{
+    const collectionRef = db.collection(collection);
     return await collectionRef.doc(id).delete()
 }

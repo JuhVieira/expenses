@@ -11,7 +11,7 @@ class App extends Component {
     return (
       <BrowserRouter>
           <Switch>
-            <Route exact path='/' component={Dashboard} />
+            <Route path='/' component={Dashboard} />
           </Switch>
       </BrowserRouter>
     );

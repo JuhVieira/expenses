@@ -62,12 +62,12 @@ const ModalEdit = ({ is_open, close, item, handleChange, save }) => (
                     <FormControlLabel
                         control={
                             <Checkbox
-                                checked={item.paid}
-                                onChange={() => handleChange(!item.paid, 'paid')}
+                                checked={item.received}
+                                onChange={() => handleChange(!item.received, 'received')}
                                 color="primary"
                             />
                         }
-                        label="Pago"
+                        label="Recebido"
                         style={{ marginTop: 25 }}
                     />
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>

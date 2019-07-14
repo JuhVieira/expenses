@@ -1,44 +1,58 @@
 import React from 'react';
 
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Fab,
+    Paper,
+    Typography
+} from '@material-ui/core'
 
+import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import CreateIcon from '@material-ui/icons/Create';
 import CheckIcon from '@material-ui/icons/Check';
-import CloseIcon from '@material-ui/icons/Close';
 
-import { Typography } from '@material-ui/core';
-import { formatMoney } from '../../utils'
-import moment from 'moment'
+import { formatMoney } from '../../utils';
+import moment from 'moment';
 
-moment().locale('pt-br')
-
-const TableList = ({ items, openModal, deleteItem }) => (
+const TableList = ({ columns, items, title, openModal, deleteItem }) => (
     <Paper style={{
         width: '100%',
         marginTop: 15,
         overflowX: 'auto'
     }}>
-        <Typography variant="h6" id="tableTitle" style={{ margin: 10 }}>
-            Lista de Despesas
-        </Typography>
-        <IconButton onClick={() => openModal()} size="small" aria-label="Delete" style={{ margin: 10 }}>
-            <DeleteIcon />
-        </IconButton>
+
+        <div style={{
+            display: "flex",
+            justifyContent: "space-between",
+            margin: 15,
+        }}>
+            <Typography variant="h6" id="tableTitle" style={{ margin: 10 }}>
+                {title}
+            </Typography>
+            <Fab
+                variant="extended"
+                size="medium"
+                color="primary"
+                aria-label="Add"
+                style={{ margin: 10 }}
+                onClick={() => openModal()}>
+                <AddIcon style={{ marginRight: 5 }} />
+                Adicionar
+            </Fab>
+        </div>
         <Table>
             <TableHead>
                 <TableRow>
-                    <TableCell>Description</TableCell>
-                    <TableCell align="center">Valor</TableCell>
-                    <TableCell align="center">Data</TableCell>
-                    <TableCell align="center">Pago?</TableCell>
-                    <TableCell align="right"></TableCell>
+                    {columns.map((column, i) => (
+                        <TableCell align={i===0 ? "left" : "center"} key={i}>
+                            {column}</TableCell>
+                    ))}
                 </TableRow>
             </TableHead>
             <TableBody>
@@ -47,25 +61,26 @@ const TableList = ({ items, openModal, deleteItem }) => (
                         <TableCell component="th" scope="row">
                             {item.description}
                         </TableCell>
-                        <TableCell align="center">{formatMoney(item.value)}</TableCell>
                         <TableCell align="center">{moment(item.date.toDate()).format('DD/MM/YYYY')}</TableCell>
+                        <TableCell align="center">{formatMoney(item.value)}</TableCell>
                         <TableCell align="center">
-                            {item.paid ?
+                            {item.paid || item.received ?
                                 <CheckIcon style={{ color: "green", fontWeight: 600 }} /> :
                                 null
                             }
                         </TableCell>
                         <TableCell align="right">
-                            <IconButton onClick={() => deleteItem(item.id)} size="small" aria-label="Delete" style={{ margin: 10 }}>
-                                <DeleteIcon />
-                            </IconButton>
                             <IconButton onClick={() => openModal(item)} size="small" aria-label="Edit">
                                 <CreateIcon />
+                            </IconButton>
+                            <IconButton onClick={() => deleteItem(item.id)} size="small" color="primary" aria-label="Delete" style={{ margin: 10 }}>
+                                <DeleteIcon />
                             </IconButton>
                         </TableCell>
                     </TableRow>
                 ))}
             </TableBody>
+
         </Table>
     </Paper>
 )

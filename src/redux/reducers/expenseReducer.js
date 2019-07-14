@@ -6,7 +6,7 @@ const initialState = {
       'Value',
       'Pago',
       ''
-    ]
+    ],
   };
   export const expenseReducer = (state = initialState, action) => {
     switch (action.type) {

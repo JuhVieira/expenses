@@ -7,7 +7,7 @@ import App from './App';
 import { configureStore } from './redux/store'
 import './index.css';
 
-const store = configureStore()
+export const store = configureStore()
 
 
 ReactDOM.render(

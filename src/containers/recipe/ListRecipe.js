@@ -8,6 +8,7 @@ import Modal from '../../components/modalRecipe/Modal'
 
 import { getCollection, deleteItem, saveItem } from '../../providers/firebaseProvider';
 import { updateRevenue } from '../../redux/actions/revenueActions';
+import { isLoading } from '../../redux/actions/rootActions';
 
 
 class ListRevenue extends Component {
@@ -21,9 +22,11 @@ class ListRevenue extends Component {
     }
 
     async componentDidMount() {
-        const { updateRevenue } = this.props
+        const { updateRevenue, isLoading } = this.props
+        isLoading(true)
         await getCollection('revenue', async ({ docs }) => {
             updateRevenue(docs)
+            isLoading(false)
         })
     }
 
@@ -58,7 +61,7 @@ class ListRevenue extends Component {
 
     render() {
         const { is_open, item_selected } = this.state
-        const { revenue, columns } = this.props
+        const { revenue, columns, is_loading } = this.props
         return (
             <Container>
                 <CssBaseline />
@@ -70,6 +73,7 @@ class ListRevenue extends Component {
                     <TableList 
                         columns={columns}
                         items={revenue}
+                        loading={is_loading}
                         title="Lista de Receitas"
                         openModal={(item) => this.handleModalChange(item)}
                         deleteItem={(id) => this.deleteItem(id)}
@@ -90,12 +94,14 @@ class ListRevenue extends Component {
 const mapStateToProps = (state) => {
     return {
         revenue: state.revenue.values,
-        columns: state.revenue.columns
+        columns: state.revenue.columns,
+        is_loading: state.root.is_loading
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    updateRevenue: docs => dispatch(updateRevenue(docs))
+    updateRevenue: docs => dispatch(updateRevenue(docs)),
+    isLoading: (value) => dispatch(isLoading(value)),
 })
 
 

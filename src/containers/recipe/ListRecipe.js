@@ -22,12 +22,12 @@ class ListRevenue extends Component {
     }
 
     async componentDidMount() {
-        const { updateRevenue, isLoading } = this.props
+        const { updateRevenue, isLoading, auth } = this.props
         isLoading(true)
         await getCollection('revenue', async ({ docs }) => {
             updateRevenue(docs)
             isLoading(false)
-        })
+        }, auth.uid)
     }
 
     handleModalChange(item) {
@@ -35,8 +35,8 @@ class ListRevenue extends Component {
             ...this.state,
             is_open: !this.state.is_open,
             item_selected: item ?
-             { ...item, date: item.date.toDate() } :
-             { date: new Date(), description: '', value: '', received: false }
+                { ...item, date: item.date.toDate() } :
+                { date: new Date(), description: '', value: '', received: false }
         })
     }
 
@@ -55,13 +55,14 @@ class ListRevenue extends Component {
     async save(e) {
         e.preventDefault();
         const { item_selected } = this.state
-        await saveItem('revenue', item_selected)
+        const { auth } = this.props
+        await saveItem('revenue', item_selected, auth.uid)
         this.handleModalChange()
     }
 
     render() {
         const { is_open, item_selected } = this.state
-        const { revenue, columns, is_loading } = this.props
+        const { revenue, columns, is_loading, is_loading_modal } = this.props
         return (
             <Container>
                 <CssBaseline />
@@ -70,7 +71,7 @@ class ListRevenue extends Component {
                     direction="row"
                     justify="center"
                 >
-                    <TableList 
+                    <TableList
                         columns={columns}
                         items={revenue}
                         loading={is_loading}
@@ -81,6 +82,7 @@ class ListRevenue extends Component {
                     <Modal is_open={is_open}
                         close={() => this.handleModalChange()}
                         item={item_selected}
+                        loading={is_loading_modal}
                         handleChange={this.handleChange}
                         save={this.save}
                     />
@@ -91,18 +93,13 @@ class ListRevenue extends Component {
 }
 
 
-const mapStateToProps = (state) => {
-    return {
-        revenue: state.revenue.values,
-        columns: state.revenue.columns,
-        is_loading: state.root.is_loading
-    }
-}
-
-const mapDispatchToProps = (dispatch) => ({
-    updateRevenue: docs => dispatch(updateRevenue(docs)),
-    isLoading: (value) => dispatch(isLoading(value)),
+const mapStateToProps = (state) => ({
+    auth: state.firebase.auth,
+    revenue: state.revenue.values,
+    columns: state.revenue.columns,
+    is_loading: state.root.is_loading,
+    is_loading_modal: state.root.is_loading_modal
 })
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(ListRevenue)
+export default connect(mapStateToProps, { updateRevenue, isLoading })(ListRevenue)

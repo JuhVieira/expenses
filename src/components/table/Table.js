@@ -78,7 +78,7 @@ const TableList = ({ columns, items, title, loading, openModal, deleteItem }) =>
                                     <IconButton onClick={() => openModal(item)} size="small" aria-label="Edit">
                                         <CreateIcon />
                                     </IconButton>
-                                    <IconButton onClick={() => deleteItem(item.id)} size="small" color="primary" aria-label="Delete" style={{ margin: 10 }}>
+                                    <IconButton onClick={() => deleteItem(item.id)} size="small" color="secondary" aria-label="Delete" style={{ margin: 10 }}>
                                         <DeleteIcon />
                                     </IconButton>
                                 </TableCell>

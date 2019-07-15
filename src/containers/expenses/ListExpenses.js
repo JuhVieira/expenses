@@ -22,12 +22,12 @@ class ListExpenses extends Component {
     }
 
     async componentDidMount() {
-        const { updateExpenses, isLoading } = this.props
+        const { auth, updateExpenses, isLoading } = this.props
         isLoading(true)
         await getCollection('expenses', async ({ docs = [] }) => {
             updateExpenses(docs)
             isLoading(false)
-        })
+        }, auth.uid)
     }
 
     handleModalChange(item) {
@@ -35,8 +35,8 @@ class ListExpenses extends Component {
             ...state,
             is_open: !state.is_open,
             item_selected: item ?
-            { ...item, date: item.date.toDate() } :
-            { date: new Date(), description: '', value: '', paid: false }
+                { ...item, date: item.date.toDate() } :
+                { date: new Date(), description: '', value: '', paid: false }
         }))
     }
 
@@ -55,7 +55,8 @@ class ListExpenses extends Component {
     async save(e) {
         e.preventDefault();
         const { item_selected } = this.state
-        await saveItem('expenses', item_selected)
+        const { auth } = this.props
+        await saveItem('expenses', item_selected, auth.uid)
         this.handleModalChange()
     }
 
@@ -92,19 +93,13 @@ class ListExpenses extends Component {
 }
 
 
-const mapStateToProps = (state) => {
-    return {
-        expenses: state.expenses.values,
-        columns: state.expenses.columns,
-        is_loading: state.root.is_loading,
-        is_loading_modal: state.root.is_loading_modal,
-    }
-}
-
-const mapDispatchToProps = (dispatch) => ({
-    updateExpenses: docs => dispatch(updateExpenses(docs)),
-    isLoading: (value) => dispatch(isLoading(value)),
+const mapStateToProps = (state) => ({
+    auth: state.firebase.auth,
+    expenses: state.expenses.values,
+    columns: state.expenses.columns,
+    is_loading: state.root.is_loading,
+    is_loading_modal: state.root.is_loading_modal,
 })
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(ListExpenses)
+export default connect(mapStateToProps, { updateExpenses, isLoading })(ListExpenses)

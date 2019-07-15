@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { 
+import {
     Modal,
     Typography,
     InputAdornment,
@@ -9,6 +9,7 @@ import {
     Button,
     Paper,
     TextField,
+    LinearProgress
 } from '@material-ui/core';
 import DateFnsUtils from '@date-io/date-fns';
 import {
@@ -19,16 +20,19 @@ import {
 import moment from 'moment';
 import './Modal.scss';
 
-const ModalEdit = ({ is_open, close, item, handleChange, save }) => (
+const ModalEdit = ({ is_open, close, item, loading, handleChange, save }) => (
     <Modal
         open={is_open}
         onClose={() => close()}
         className="modal"
     >
         <Paper className="paper">
+            {loading ?
+                <LinearProgress variant="query" />
+                : null}
             <Typography variant="h6" id="tableTitle" className="header">
-                Edição de Despesas
-        </Typography>
+                {item.id ? 'Editar Receita' : 'Adicionar Receita'}
+            </Typography>
             <form className="form" onSubmit={(e) => save(e)}>
                 <TextField
                     label="Descrição"
@@ -38,15 +42,8 @@ const ModalEdit = ({ is_open, close, item, handleChange, save }) => (
                     value={item.description}
                     required
                 />
-                {/* <TextField
-                    label="With normal TextField"
-                    id="simple-start-adornment"
-                    InputProps={{
-                        startAdornment: <InputAdornment position="start">Kg</InputAdornment>,
-                    }}
-                /> */}
                 <TextField
-                    id="simple-start-adornment"
+                    id="value"
                     label="Valor"
                     value={item.value}
                     onChange={({ target }) => handleChange(Number(target.value), 'value')}
@@ -73,7 +70,7 @@ const ModalEdit = ({ is_open, close, item, handleChange, save }) => (
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <KeyboardDatePicker
                             margin="normal"
-                            id="mui-pickers-date"
+                            id="date"
                             label="Data"
                             value={moment(item.date)}
                             onChange={(value) => handleChange(value, 'date')}

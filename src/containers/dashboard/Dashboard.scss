@@ -1,0 +1,13 @@
+.link-toolbar{
+    text-decoration: none;
+    color: #fff;
+    padding: 0 10px;
+    font-size: 16px;
+    &.active{
+        padding-bottom: 5px;
+        border-bottom: solid 2px #fff;
+    }
+  }
+.icon-toolbar{
+    padding-left: 15px !important;
+  }

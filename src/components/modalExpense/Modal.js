@@ -31,8 +31,8 @@ const ModalEdit = ({ is_open, close, item, loading, handleChange, save }) => (
                 {loading ?
                     <LinearProgress variant="query" />
                     : null}
-                <Typography variant="h6" id="tableTitle" className="header">
-                    Edição de Despesas
+                <Typography variant="h6" id="title" className="header">
+                    {item.id ? 'Editar Despesa' : 'Adicionar Despesa'}
                 </Typography>
                 <form className="form" onSubmit={(e) => save(e)}>
                     <TextField
@@ -43,13 +43,6 @@ const ModalEdit = ({ is_open, close, item, loading, handleChange, save }) => (
                         value={item.description}
                         required
                     />
-                    {/* <TextField
-                    label="With normal TextField"
-                    id="simple-start-adornment"
-                    InputProps={{
-                        startAdornment: <InputAdornment position="start">Kg</InputAdornment>,
-                    }}
-                /> */}
                     <TextField
                         id="simple-start-adornment"
                         label="Valor"
@@ -92,7 +85,7 @@ const ModalEdit = ({ is_open, close, item, loading, handleChange, save }) => (
                     </div>
                     <Button variant="contained" color="primary" type="submit" style={{ marginLeft: "auto", marginTop: 25 }}>
                         Salvar
-                </Button>
+                    </Button>
                 </form>
             </Paper>
         </>

@@ -51,6 +51,7 @@ const TableList = ({ columns, items, title, loading, openModal, deleteItem }) =>
                         Adicionar
                     </Fab>
                 </div>
+
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -86,6 +87,11 @@ const TableList = ({ columns, items, title, loading, openModal, deleteItem }) =>
                         ))}
                     </TableBody>
                 </Table>
+                {items.length <= 0 &&
+                    <Typography variant="subtitle1" style={{ textAlign: "center", margin: 20, color: "#0000008a" }}>
+                        Insira novos dados.
+                    </Typography>}
+
             </Paper>
         }
     </>

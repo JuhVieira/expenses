@@ -11,11 +11,12 @@ import {
     TextField,
     LinearProgress
 } from '@material-ui/core';
-import DateFnsUtils from '@date-io/date-fns';
 import {
     MuiPickersUtilsProvider,
     KeyboardDatePicker,
 } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+
 
 import moment from 'moment';
 import './Modal.scss';
@@ -43,6 +44,7 @@ const ModalEdit = ({ is_open, close, item, loading, handleChange, save }) => (
                         value={item.description}
                         required
                     />
+                    
                     <TextField
                         id="simple-start-adornment"
                         label="Valor"

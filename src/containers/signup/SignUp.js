@@ -21,6 +21,8 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import { isLoading } from '../../redux/actions/rootActions';
 import { signUp } from '../../providers/firebaseProvider';
+import { errorLoginMessage } from '../../messages';
+import Notification from '../../components/notifications/Notification';
 
 import './SignUp.scss';
 
@@ -52,7 +54,8 @@ class SignInScreen extends Component {
         try {
             await signUp(user)
         } catch (e) {
-            console.log(e)
+            const { title, message } = errorLoginMessage(e.code)
+            Notification('error', title, message)
         }
     }
 
@@ -81,6 +84,7 @@ class SignInScreen extends Component {
                                 <Input
                                     id="name"
                                     value={user.name}
+                                    required
                                     onChange={(e) => this.handleChange('name', e.target.value)}
                                 />
                             </FormControl>
@@ -89,6 +93,7 @@ class SignInScreen extends Component {
                                 <Input
                                     id="email"
                                     value={user.email}
+                                    required
                                     onChange={(e) => this.handleChange('email', e.target.value)}
                                 />
                             </FormControl>
@@ -99,6 +104,7 @@ class SignInScreen extends Component {
                                     type={showPassword ? 'text' : 'password'}
                                     value={user.password}
                                     autoComplete="password"
+                                    required
                                     onChange={(e) => this.handleChange('password', e.target.value)}
                                     endAdornment={
                                         <InputAdornment position="end">
@@ -109,9 +115,10 @@ class SignInScreen extends Component {
                                     }
                                 />
                             </FormControl>
-                            <Typography variant="subtitle2">
+                            <Typography variant="subtitle1" className="has-register">
+                                Já possui cadastro? 
                                 <Link to="/login">
-                                    Já possuo cadastro
+                                    Faça Login
                                 </Link>
                             </Typography>
                             <div className="button">

@@ -19,14 +19,18 @@ import IconButton from '@material-ui/core/IconButton';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
+import Notification from '../../components/notifications/Notification';
+
 import { isLoading } from '../../redux/actions/rootActions';
 import { signIn } from '../../providers/firebaseProvider'
+import { errorLoginMessage } from '../../messages';
 
 import './SignIn.scss'
+
+
 class SignInScreen extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             showPassword: false,
             user: {
@@ -48,7 +52,8 @@ class SignInScreen extends Component {
         try {
             await signIn(user)
         } catch (e) {
-            console.log(e)
+            const { title, message } = errorLoginMessage(e.code)
+            Notification('error', title, message)
         }
     }
 
@@ -99,9 +104,10 @@ class SignInScreen extends Component {
                                     }
                                 />
                             </FormControl>
-                            <Typography variant="subtitle2">
+                            <Typography variant="subtitle2" className="no-register">
+                                    Não possui cadastro?
                                 <Link to="/cadastrar">
-                                    Não possui cadastro
+                                    Cadastre-se agora.
                                 </Link>
                             </Typography>
                             <div className="button">

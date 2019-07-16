@@ -13,6 +13,16 @@
     .MuiFormControl-root{
         margin-top: 15px !important;
     }
+    .has-register{
+        text-align: center;
+        margin-top: 10px;
+        a{
+            text-decoration: none;
+            margin-left: 5px;
+            color: #3f51b5;
+            font-weight: 600;
+        }
+    }
 }   
 input{
 }
